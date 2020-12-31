@@ -1,9 +1,11 @@
-import express from 'express';
-import mongoose from "mongoose";
-import dotenv from 'dotenv'
+const express = require('express');
+const mongoose = require('mongoose');
+require('dotenv/config');
+
+// Routes import'
+const postsRoute = require('./routes/posts')
 
 const app = express();
-dotenv.config();
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
@@ -13,6 +15,9 @@ app.use(express.json());
 app.get('/', (req, res) => {
     res.send('Hello world!')
 })
+app.use('/posts', postsRoute);
+
+
 
 // Connect to Database
 mongoose.connect(
