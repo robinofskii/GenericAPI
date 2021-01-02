@@ -5,15 +5,15 @@ const dotenv = require('dotenv')
 const app = express()
 dotenv.config()
 
+// Middleware
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
 // Routes import
 const authRoute = require('./routes/auth')
 
 // Routes Middlewares
 app.use('/auth', authRoute)
-
-// Middleware
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
 
 // Routes
 app.get('/', (req, res) => {
