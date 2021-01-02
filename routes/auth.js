@@ -44,7 +44,7 @@ router.post('/login', async (req, res) => {
 })
 
 router.get('/user', verify, async (req, res) => {
-  const user = await User.findOne({ email: req.body.email })
+  const user = await User.findOne({ _id: req.user._id })
   if (!user) return res.status(400).send('User not found')
 
   res.send({
