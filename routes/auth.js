@@ -2,7 +2,8 @@ const router = require('express').Router()
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const User = require('../models/User')
-const { registerValidation, loginValidation } = require('../validation')
+const verify = require('../middleware/verifyToken')
+const { registerValidation, loginValidation } = require('../validation/authValidation')
 
 router.post('/register', async (req, res) => {
   const { error } = registerValidation(req.body)
@@ -40,6 +41,18 @@ router.post('/login', async (req, res) => {
 
   const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET)
   res.header('auth-token', token).send(token)
+})
+
+router.get('/user', verify, async (req, res) => {
+  const user = await User.findOne({ email: req.body.email })
+  if (!user) return res.status(400).send('User not found')
+
+  res.send({
+    name: user.name,
+    email: user.email,
+    created_at: user.createdAt,
+    updated_at: user.updatedAt
+  })
 })
 
 module.exports = router
