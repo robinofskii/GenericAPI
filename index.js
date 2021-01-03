@@ -11,9 +11,13 @@ app.use(express.urlencoded({ extended: true }))
 
 // Routes import
 const authRoute = require('./routes/auth')
+const highscoreRoute = require('./routes/highscores')
+const imagesRoute = require('./routes/images')
 
 // Routes Middlewares
 app.use('/auth', authRoute)
+app.use('/highscores', highscoreRoute)
+app.use('/images', imagesRoute)
 
 // Routes
 app.get('/', (req, res) => {
