@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Robin-vandenberg/GenericAPI.git"
+    "url": "git+https://github.com/Robinofskii/GenericAPI.git"
   },
   "author": "Robin van den Berg",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Robin-vandenberg/GenericAPI/issues"
+    "url": "https://github.com/Robinofskii/GenericAPI/issues"
   },
-  "homepage": "https://github.com/Robin-vandenberg/GenericAPI#readme",
+  "homepage": "https://github.com/Robinofskii/GenericAPI#readme",
   "dependencies": {
     "bcrypt": "^5.0.0",
     "dotenv": "^8.2.0",

@@ -10,9 +10,10 @@ A generic REST API built on Express and Mongoose, used for testing some of my ow
 
 ### Variables
 
-* `PORT` Here you can provide a port on which the server will run.
-* `DB_CONNECTION` This is where you can provide a [MongoDB connection string](https://cloud.mongodb.com/), you will need to create your own account and cluster first.
-* `TOKEN_SECRET` To give out tokens to make authentication easier with following requests, a token secret is needed.[JWT](https://jwt.io/) will use this secret to generate and validate tokens.
+- `PORT` Here you can provide a port on which the server will run.
+- `DB_CONNECTION` This is where you can provide a [MongoDB connection string](https://cloud.mongodb.com/), you will need to create your own account and cluster first.
+- `JWT_SECRET` To give out tokens to make authentication easier with following requests, a token secret is needed. [JWT](https://jwt.io/) will use this secret to generate and validate tokens.
+- `JWT_EXPIRES_IN` The token will expire in the amount of days provided in this variable.
 
 ## Usage
 
