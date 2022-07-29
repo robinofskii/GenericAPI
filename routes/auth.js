@@ -1,58 +1,70 @@
-const router = require('express').Router()
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-const User = require('../models/User')
-const verify = require('../middleware/verifyToken')
-const { registerValidation, loginValidation } = require('../validation/authValidation')
+const router = require("express").Router();
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
+const verify = require("../middleware/verifyToken");
+const {
+  registerValidation,
+  loginValidation,
+} = require("../validation/authValidation");
 
-router.post('/register', async (req, res) => {
-  const { error } = registerValidation(req.body)
-  if (error) return res.status(400).send(error.details[0].message)
+/* This is the code for the register route. It is using the registerValidation function to validate the
+request body. If the request body is valid, it will check if the email already exists in the
+database. If it does not exist, it will create a new user with the hashed password. */
+router.post("/register", async (req, res) => {
+  const { error } = registerValidation(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
 
-  const emailExists = await User.findOne({ email: req.body.email })
-  if (emailExists) return res.status(400).send('Email already exists')
+  const emailExists = await User.findOne({ email: req.body.email });
+  if (emailExists) return res.status(400).send("Email already exists");
 
-  const salt = await bcrypt.genSalt(10)
-  const hashedPassword = await bcrypt.hash(req.body.password, salt)
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
   const user = new User({
     name: req.body.name,
     email: req.body.email,
-    password: hashedPassword
-  })
+    password: hashedPassword,
+  });
 
   try {
-    await user.save()
-    res.send({ user: user._id })
+    await user.save();
+    res.send({ user: user._id });
   } catch (err) {
-    res.status(400).send(err)
+    res.status(400).send(err);
   }
-})
+});
 
-router.post('/login', async (req, res) => {
-  const { error } = loginValidation(req.body)
-  if (error) return res.status(400).send(error.details[0].message)
+/* This is the code for the login route. It is using the loginValidation function to validate the
+request body. If the request body is valid, it will check if the email exists in the database. If it
+does exist, it will check if the password is valid. If it is valid, it will create a token and send
+it to the client. */
+router.post("/login", async (req, res) => {
+  const { error } = loginValidation(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
 
-  const user = await User.findOne({ email: req.body.email })
-  if (!user) return res.status(400).send('Invalid email or password')
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) return res.status(400).send("Invalid email or password");
 
-  const validPass = await bcrypt.compare(req.body.password, user.password)
-  if (!validPass) return res.status(400).send('Invalid email or password')
+  const validPass = await bcrypt.compare(req.body.password, user.password);
+  if (!validPass) return res.status(400).send("Invalid email or password");
 
-  const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET)
-  res.header('auth-token', token).send(token)
-})
+  const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
+  res.header("auth-token", token).send(token);
+});
 
-router.get('/user', verify, async (req, res) => {
-  const user = await User.findOne({ _id: req.user._id })
-  if (!user) return res.status(400).send('User not found')
+/* This is the code for the user route. It is using the verify middleware to verify the token. If the
+token is valid, it will return the user's information. */
+router.get("/user", verify, async (req, res) => {
+  const user = await User.findOne({ _id: req.user._id });
+  if (!user) return res.status(400).send("User not found");
 
   res.send({
     name: user.name,
     email: user.email,
     created_at: user.createdAt,
-    updated_at: user.updatedAt
-  })
-})
+    updated_at: user.updatedAt,
+  });
+});
 
-module.exports = router
+module.exports = router;
